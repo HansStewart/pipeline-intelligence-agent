@@ -1,231 +1,109 @@
-🧠 Pipeline Intelligence Agent
-
-> An AI-powered sales operations agent that connects directly to HubSpot, pulls live deal data, and returns a full pipeline intelligence report — built with Python, GPT-4o, and deployed on Google Cloud Run.
-
-
-
-📌 Overview
-
-The Pipeline Intelligence Agent is a production-ready AI agent that automates the work of a senior sales operations analyst. It retrieves all active deals from your HubSpot CRM, processes the data through GPT-4o, and generates a comprehensive intelligence report — surfacing deals at risk, prioritized actions, revenue forecasts, and pipeline health scores in real time.
-
-
-
-]🚀 Features
-
-- Live HubSpot Integration — Pulls all active deals and pipeline stage data via the HubSpot CRM v3 API
-- GPT-4o Analysis Engine — Sends structured deal data to GPT-4o for deep sales intelligence analysis
-- Pipeline Health Score — Scores your pipeline 0–100 with a clear explanation
-- Revenue Forecast Summary — Total pipeline value, weighted forecast, and deals closing this month
-- Deals to Prioritize This Week — Top 3–5 deals ranked by urgency with specific reasoning
-- Deals at Risk — Flags stale deals, overdue close dates, and low-probability opportunities
-- Recommended Next Actions — Specific, actionable next steps per deal
-- Overall Pipeline Observations** — Trend analysis and pattern detection across the full pipeline
-- Health Check Endpoint — `/health` route for uptime monitoring and deployment verification
-- Cloud-Native Deployment — Containerized with Docker and deployed on Google Cloud Run
-
-
-
-🛠 Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Language | Python 3.11 |
-| Web Framework | Flask 3.0.3 |
-| AI Engine | OpenAI GPT-4o |
-| CRM Integration | HubSpot CRM API v3 |
-| HTTP Client | Requests 2.32.3 |
-| Environment Config | python-dotenv |
-| Production Server | Gunicorn |
-| Containerization | Docker |
-| Cloud Deployment | Google Cloud Run |
-| CI/CD | Google Cloud Build |
-
-
-
-📁 Project Structure
-
-```
-pipeline-intelligence-agent/
-├── app.py                  # Flask app — routes and HTML report wrapper
-├── hubspot_client.py       # HubSpot API client — fetches deals and pipeline stages
-├── analyzer.py             # GPT-4o analysis engine — generates the intelligence report
-├── requirements.txt        # Python dependencies
-├── Dockerfile              # Container configuration
-├── .dockerignore           # Files excluded from Docker build
-├── .env                    # Local environment variables (never committed)
-├── .env.example            # Environment variable template for contributors
-└── .gitignore              # Git exclusions
-```
-
-
-
-⚙️ Setup & Installation
-
-Prerequisites
-
-- Python 3.11+
-- Git
-- Docker (for containerized deployment)
-- Google Cloud SDK (for Cloud Run deployment)
-- HubSpot account with Private App access
-- OpenAI API key
-
-1. Clone the Repository
-
-```bash
-git clone https://github.com/HansStewart/pipeline-intelligence-agent.git
-cd pipeline-intelligence-agent
-```
-
-2. Create a Virtual Environment
-
-```bash
-python -m venv venv
-source venv/Scripts/activate   # Windows (Git Bash)
-source venv/bin/activate        # macOS / Linux
-```
-
-3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-4. Configure Environment Variables
-
-Copy the example file and fill in your credentials:
-
-```bash
-cp .env.example .env
-```
-
-Open `.env` and set your values:
-
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-HUBSPOT_TOKEN=your_hubspot_private_app_token_here
-```
-
-5. HubSpot Private App Setup
-
-This agent requires a HubSpot Private App token with the following scopes:
-
-- `crm.objects.deals.read`
-- `crm.schemas.deals.read`
-- `crm.pipelines.orders.read`
-
-To generate a token:
-1. Go to HubSpot Settings → Integrations → Private Apps
-2. Click Create a private app
-3. Under the Scopes tab, enable the three scopes above
-4. Click Create app and copy the `pat-` token
-
-
-
-▶️ Running Locally
-
-```bash
-python app.py
-```
-
-Open your browser and navigate to:
-
-```
-http://localhost:8080
-```
-
-The report will generate in **15–30 seconds** as the agent fetches your live HubSpot data and runs it through GPT-4o.
-
-***
-
-## 🐳 Running with Docker
-
-```bash
-docker build -t pipeline-intelligence-agent .
-docker run -p 8080:8080 --env-file .env pipeline-intelligence-agent
-```
-
-
-
-☁️ Deploying to Google Cloud Run
-
-Deploy from Source
-
-```bash
-gcloud run deploy pipeline-intelligence-agent \
-  --source . \
-  --region us-central1 \
-  --platform managed \
-  --allow-unauthenticated \
-  --timeout 120
-```
-
-Set Environment Variables
-
-```bash
-gcloud run services update pipeline-intelligence-agent \
-  --region us-central1 \
-  --set-env-vars OPENAI_API_KEY=your_key_here,HUBSPOT_TOKEN=your_token_here
-```
-
-
-
-🔌 API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/` | Generates and returns the full pipeline intelligence report |
-| `GET` | `/health` | Returns agent status for uptime monitoring |
-
-Health Check Response
-
-```json
-{
-  "status": "ok",
-  "agent": "pipeline-intelligence-agent"
-}
-```
-
-
-
-📊 Report Sections
-
-The generated report includes the following sections:
-
-1. Pipeline Health Score — A 0–100 score with a written explanation of what is driving the number
-2. Revenue Forecast Summary — Total pipeline value, probability-weighted forecast, and this month's closeable deals
-3. Deals to Prioritize This Week — Ranked list with the reasoning behind each prioritization
-4. Deals at Risk — Flags deals with no recent activity, overdue close dates, or low win probability
-5. Recommended Next Actions — Specific, deal-level action items for your sales team
-6. Overall Observations — Pattern analysis and strategic commentary on the state of the pipeline
-
-
-
-🔐 Security Notes
-
-- Never commit your `.env` file — it is excluded via `.gitignore`
-- Use Google Cloud Secret Manager for production-grade secret management
-- The HubSpot token used is a read-only Private App token — it cannot modify your CRM data
-- Cloud Run services can be restricted to authenticated access by removing `--allow-unauthenticated`
-
-
-
-🗺 Roadmap
-
-- [ ] Add Slack notification integration to post daily reports automatically
-- [ ] Add deal-level trend tracking across multiple report generations
-- [ ] Support multiple HubSpot pipelines with a dropdown selector
-- [ ] Add a PDF export option for the intelligence report
-- [ ] Integrate with Google Sheets for persistent pipeline tracking
-
-
-
-
-👤 Author
-
-Hans Stewart
-[GitHub](https://github.com/HansStewart)
-
-
-
-Built with Python, OpenAI, HubSpot API, and Google Cloud Run.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  PIPELINE INTELLIGENCE AGENT
+  Live HubSpot deal data → prioritized pipeline report with clear
+  action paths.
+  by Hans Stewart · hansstewart.dev
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Architecture    →   hansstewart.github.io/ai-architecture
+  Portfolio       →   hansstewart.dev
+  GitHub          →   github.com/HansStewart/pipeline-intelligence-agent
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT IT DOES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  A sales-operations intelligence system that connects to HubSpot,
+  pulls the live state of all active deals, normalizes the data, and
+  uses GPT-4o to produce an actionable pipeline intelligence report —
+  automatically, on demand.
+
+  The agent calculates pipeline health, flags stale and overdue deals,
+  generates weighted forecast logic, and produces a prioritized list
+  of next actions for near-term execution. The output is machine-usable
+  JSON designed to feed dashboards, decision flows, and executive reviews
+  without a manual analyst in the loop.
+
+  Primary value: automates a senior sales-ops style pipeline analysis in
+  real time. Use cases: pipeline reviews, executive reporting, and team
+  prioritization.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BACKEND WORKFLOW — 4 STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Step 01 — HubSpot connection
+    Authenticates against HubSpot CRM v3 APIs.
+    Pulls active deals, stages, dates, values, and core pipeline metadata.
+    Collects the working dataset required for sales analysis.
+    → Input: Live CRM deal data
+
+  Step 02 — Normalization layer
+    Standardizes stage values, dates, and probability context.
+    Highlights stale, overdue, and low-momentum opportunities.
+    Builds structured inputs for forecasting and prioritization.
+    → Intermediate: Clean pipeline dataset
+
+  Step 03 — Intelligence generation
+    Uses GPT-4o to calculate pipeline health and identify risk patterns.
+    Generates weighted forecast logic and high-priority deal focus.
+    Produces recommended next actions for near-term execution.
+    → Processing: Health scoring + prioritization
+
+  Step 04 — Report delivery
+    Packages forecast, risk flags, and priorities into structured output.
+    Returns a machine-usable JSON response for BI and dashboard use.
+    Supports real-time pipeline review without manual analyst work.
+    → Output: Pipeline intelligence report
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REPORT CONTAINS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Pipeline health score       Overall state of the active deal set
+  Risk flags                  Stale, overdue, and low-momentum deals
+  Forecast                    Weighted revenue projection by stage
+  Priority action list        Ranked next-best actions for near-term
+                              execution
+  Decision support            Clear flags for risk and forecast strength
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TECH STACK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Language        Python 3.11
+  Framework       Flask
+  Server          Gunicorn
+  AI Model        OpenAI GPT-4o
+  CRM             HubSpot CRM v3 API
+  Deployment      Google Cloud Run — us-east1
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LOCAL DEVELOPMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  git clone https://github.com/HansStewart/pipeline-intelligence-agent.git
+  cd pipeline-intelligence-agent
+  pip install -r requirements.txt
+  cp .env.example .env
+  → Add OPENAI_API_KEY and HUBSPOT_API_KEY to .env
+  python main.py
+  → Open http://localhost:8080
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ENVIRONMENT VARIABLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  OPENAI_API_KEY       required    Intelligence generation and scoring
+  HUBSPOT_API_KEY      required    CRM v3 API read access
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Hans Stewart · Marketing Automation Engineer · hansstewart.dev
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
